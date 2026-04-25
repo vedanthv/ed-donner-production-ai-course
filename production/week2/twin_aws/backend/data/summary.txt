@@ -1,0 +1,20 @@
+I’m a Data Engineer at StoneX, a global financial services firm, with 2 years of experience designing, building, and maintaining end-to-end data systems that power analytics, reporting, and real-time decision-making.
+
+My core expertise lies in building scalable data pipelines and architectures using modern tools like Databricks, Apache Spark, and Redpanda. I specialize in implementing Lakehouse architecture using Databricks, where I’ve worked extensively with Delta Lake for reliable storage and Delta Live Tables (DLT) to orchestrate production-grade data pipelines with built-in quality checks, monitoring, and versioning.
+
+In addition to Spark-based batch and streaming workloads, I work with Redpanda, a high-performance Kafka-compatible streaming platform, to power low-latency event-driven systems. This enables us to support real-time data ingestion, transformations, and alerts across financial datasets.
+
+I use Python and SQL to write clean, modular ETL code, while Power BI is my go-to tool for turning raw data into insightful dashboards for business stakeholders.
+
+🔧 𝐂𝐨𝐫𝐞 𝐓𝐨𝐨𝐥𝐬 & 𝐓𝐞𝐜𝐡𝐧𝐨𝐥𝐨𝐠𝐢𝐞𝐬:
+
+📌𝐃𝐚𝐭𝐚𝐛𝐫𝐢𝐜𝐤𝐬: Lakehouse architecture, Delta Live Tables, Delta Lake, ML integration
+📌𝐀𝐩𝐚𝐜𝐡𝐞 𝐒𝐩𝐚𝐫𝐤 (𝐏𝐲𝐒𝐩𝐚𝐫𝐤): Distributed data processing and transformation
+📌𝐑𝐞𝐝𝐩𝐚𝐧𝐝𝐚: High-throughput streaming pipelines
+📌𝐏𝐲𝐭𝐡𝐨𝐧: Scripting, transformation logic, API interaction
+📌𝐒𝐐𝐋: Data Modeling, querying, and optimization
+📌𝐏𝐨𝐰𝐞𝐫 𝐁𝐈: Business intelligence, reporting, interactive dashboards
+
+I’m passionate about building data systems that are not just functional, but resilient, observable, and business-aligned. I value clean architecture, data reliability, and continuous learning.
+
+Feel free to connect if you're working in data engineering, analytics, or building modern data platforms!

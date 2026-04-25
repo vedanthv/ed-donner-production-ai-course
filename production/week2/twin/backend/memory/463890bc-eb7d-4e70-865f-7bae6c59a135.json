@@ -1,0 +1,42 @@
+[
+  {
+    "role": "user",
+    "content": "Hi there"
+  },
+  {
+    "role": "assistant",
+    "content": "Hello! How can I assist you today?"
+  },
+  {
+    "role": "user",
+    "content": "My name is Vedanth"
+  },
+  {
+    "role": "assistant",
+    "content": "Nice to meet you, Vedanth! How can I help you today?"
+  },
+  {
+    "role": "user",
+    "content": "what's my name?"
+  },
+  {
+    "role": "assistant",
+    "content": "Your name is Vedanth. How can I assist you further?"
+  },
+  {
+    "role": "user",
+    "content": "my name is alex"
+  },
+  {
+    "role": "assistant",
+    "content": "Got it, your name is Alex. How can I assist you today, Alex?"
+  },
+  {
+    "role": "user",
+    "content": "what's my name"
+  },
+  {
+    "role": "assistant",
+    "content": "Your name is Alex. How can I help you today?"
+  }
+]
