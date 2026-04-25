@@ -35,7 +35,7 @@ bedrock_client = boto3.client(
 
 BEDROCK_MODEL_ID = os.getenv(
     "BEDROCK_MODEL_ID",
-    "amazon.nova-micro-v1:0" 
+    "arn:aws:bedrock:us-east-1:425515537709:inference-profile/global.amazon.nova-2-lite-v1:0" 
 )
 
 # Storage
