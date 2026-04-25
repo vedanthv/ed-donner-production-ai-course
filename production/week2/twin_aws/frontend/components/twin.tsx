@@ -40,12 +40,10 @@ export default function Twin() {
         setInput('');
         setIsLoading(true);
 
-        let buffer = '';
         const assistantMessageId = (Date.now() + 1).toString();
-        let sessionIdReceived = false;
 
-        try {
-            await fetchEventSource('/api/chat', {
+        try {   
+            const res = await fetch('https://1xfooncmrh.execute-api.us-east-1.amazonaws.com/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,53 +52,57 @@ export default function Twin() {
                     message: input,
                     session_id: sessionId || undefined,
                 }),
-                onmessage(ev) {
-                    if (ev.data === '[DONE]') {
-                        setIsLoading(false);
-                        return;
-                    }
-                    if (!sessionIdReceived) {
-                        setSessionId(ev.data);
-                        sessionIdReceived = true;
-                        return;
-                    }
-                    buffer += ev.data;
-                    // Update the message in real-time
-                    setMessages(prev => {
-                        const existing = prev.find(m => m.id === assistantMessageId);
-                        if (existing) {
-                            return prev.map(m => m.id === assistantMessageId ? { ...m, content: buffer } : m);
-                        } else {
-                            return [...prev, {
-                                id: assistantMessageId,
-                                role: 'assistant',
-                                content: buffer,
-                                timestamp: new Date(),
-                            }];
-                        }
-                    });
-                },
-                onerror(err) {
-                    console.error('SSE error:', err);
-                    setIsLoading(false);
-                    const errorMessage: Message = {
-                        id: (Date.now() + 2).toString(),
-                        role: 'assistant',
-                        content: 'Sorry, I encountered an error. Please try again.',
-                        timestamp: new Date(),
-                    };
-                    setMessages(prev => [...prev, errorMessage]);
-                }
             });
+
+            const data = await res.json();
+            console.log('API Response:', data);
+
+            // store session
+            if (data.session_id) {
+                setSessionId(data.session_id);
+            }
+
+            // simulate streaming (typing effect)
+            let buffer = '';
+            const fullText = data.response;
+
+            for (let i = 0; i < fullText.length; i++) {
+                buffer += fullText[i];
+
+                await new Promise(res => setTimeout(res, 15)); // typing speed
+
+                setMessages(prev => {
+                    const existing = prev.find(m => m.id === assistantMessageId);
+                    if (existing) {
+                        return prev.map(m =>
+                            m.id === assistantMessageId
+                                ? { ...m, content: buffer }
+                                : m
+                        );
+                    } else {
+                        return [...prev, {
+                            id: assistantMessageId,
+                            role: 'assistant',
+                            content: buffer,
+                            timestamp: new Date(),
+                        }];
+                    }
+                });
+            }
+
+            setIsLoading(false);
+
         } catch (error) {
             console.error('Error:', error);
             setIsLoading(false);
+
             const errorMessage: Message = {
                 id: (Date.now() + 2).toString(),
                 role: 'assistant',
                 content: 'Sorry, I encountered an error. Please try again.',
                 timestamp: new Date(),
             };
+
             setMessages(prev => [...prev, errorMessage]);
         }
     };
