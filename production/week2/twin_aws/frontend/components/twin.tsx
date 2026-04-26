@@ -43,7 +43,7 @@ export default function Twin() {
         const assistantMessageId = (Date.now() + 1).toString();
 
         try {   
-            const res = await fetch('https://1xfooncmrh.execute-api.us-east-1.amazonaws.com/chat', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export default function Twin() {
                     session_id: sessionId || undefined,
                 }),
             });
-
+            console.log('API Request Sent:', { message: input, session_id: sessionId });
             const data = await res.json();
             console.log('API Response:', data);
 

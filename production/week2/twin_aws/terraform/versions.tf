@@ -10,10 +10,14 @@ terraform {
 }
 
 provider "aws" {
-  # Uses AWS CLI configuration (aws configure)
+  region                  = var.aws_region
+  profile                 = var.aws_profile != "" ? var.aws_profile : null
+  shared_credentials_files = var.aws_shared_credentials_file != "" ? [var.aws_shared_credentials_file] : null
 }
 
 provider "aws" {
-  alias  = "us_east_1"
-  region = "us-east-1"
+  alias                   = "us_east_1"
+  region                  = var.aws_region
+  profile                 = var.aws_profile != "" ? var.aws_profile : null
+  shared_credentials_files = var.aws_shared_credentials_file != "" ? [var.aws_shared_credentials_file] : null
 }

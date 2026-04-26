@@ -51,3 +51,21 @@ variable "root_domain" {
   type        = string
   default     = ""
 }
+
+variable "aws_region" {
+  description = "AWS region to use for Terraform operations"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "aws_profile" {
+  description = "AWS CLI profile to use for credentials if configured"
+  type        = string
+  default     = ""
+}
+
+variable "aws_shared_credentials_file" {
+  description = "Path to the AWS shared credentials file, if not using the default ~/.aws/credentials"
+  type        = string
+  default     = ""
+}

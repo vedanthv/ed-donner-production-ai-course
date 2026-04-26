@@ -1,0 +1,6 @@
+.terraform
+terraform.tfstate.d
+.terraform.lock.hcl
+LICENSE.txt
+terraform_1.9.8_linux_amd64.zip
+terraform_1.10.0_darwin_amd64.zip
