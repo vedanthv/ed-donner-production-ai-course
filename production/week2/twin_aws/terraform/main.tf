@@ -18,7 +18,7 @@ locals {
 
 # S3 bucket for conversation memory
 resource "aws_s3_bucket" "memory" {
-  bucket = "${local.name_prefix}-memory-${data.aws_caller_identity.current.account_id}"
+  bucket = "${local.name_prefix}-memory-${data.aws_caller_identity.current.account_id}-123"
   tags   = local.common_tags
 }
 
@@ -41,7 +41,7 @@ resource "aws_s3_bucket_ownership_controls" "memory" {
 
 # S3 bucket for frontend static website
 resource "aws_s3_bucket" "frontend" {
-  bucket = "${local.name_prefix}-frontend-${data.aws_caller_identity.current.account_id}"
+  bucket = "${local.name_prefix}-frontend-${data.aws_caller_identity.current.account_id}-123"
   tags   = local.common_tags
 }
 
@@ -87,7 +87,7 @@ resource "aws_s3_bucket_policy" "frontend" {
 
 # IAM role for Lambda
 resource "aws_iam_role" "lambda_role" {
-  name = "${local.name_prefix}-lambda-role"
+  name = "${local.name_prefix}-lambda-role-123"
   tags = local.common_tags
 
   assume_role_policy = jsonencode({
@@ -146,7 +146,7 @@ resource "aws_lambda_function" "api" {
 
 # API Gateway HTTP API
 resource "aws_apigatewayv2_api" "main" {
-  name          = "${local.name_prefix}-api-gateway"
+  name          = "${local.name_prefix}-api-gateway-123"
   protocol_type = "HTTP"
   tags          = local.common_tags
 
