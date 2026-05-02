@@ -9,6 +9,12 @@ locals {
 
   name_prefix = "${var.project_name}-${var.environment}"
 
+  memory_bucket_name        = "${local.name_prefix}-memory-${data.aws_caller_identity.current.account_id}"
+  frontend_bucket_name      = "${local.name_prefix}-frontend-${data.aws_caller_identity.current.account_id}"
+  memory_bucket_arn         = "arn:aws:s3:::${local.memory_bucket_name}"
+  frontend_bucket_arn       = "arn:aws:s3:::${local.frontend_bucket_name}"
+  frontend_website_endpoint = "${local.frontend_bucket_name}.s3-website-${var.aws_region}.amazonaws.com"
+
   common_tags = {
     Project     = var.project_name
     Environment = var.environment
@@ -16,14 +22,44 @@ locals {
   }
 }
 
+data "external" "memory_bucket_exists" {
+  program = [
+    "bash",
+    "-c",
+    "bucket=\"$1\"; if aws s3api head-bucket --bucket \"$bucket\" >/dev/null 2>&1; then echo '{\"exists\": true}'; else echo '{\"exists\": false}'; fi",
+    "check-bucket",
+    local.memory_bucket_name,
+  ]
+
+  query = {}
+}
+
+data "external" "frontend_bucket_exists" {
+  program = [
+    "bash",
+    "-c",
+    "bucket=\"$1\"; if aws s3api head-bucket --bucket \"$bucket\" >/dev/null 2>&1; then echo '{\"exists\": true}'; else echo '{\"exists\": false}'; fi",
+    "check-bucket",
+    local.frontend_bucket_name,
+  ]
+
+  query = {}
+}
+
+locals {
+  memory_bucket_exists   = data.external.memory_bucket_exists.result.exists
+  frontend_bucket_exists = data.external.frontend_bucket_exists.result.exists
+}
+
 # S3 bucket for conversation memory
 resource "aws_s3_bucket" "memory" {
-  bucket = "${local.name_prefix}-memory-${data.aws_caller_identity.current.account_id}"
+  count  = local.memory_bucket_exists ? 0 : 1
+  bucket = local.memory_bucket_name
   tags   = local.common_tags
 }
 
 resource "aws_s3_bucket_public_access_block" "memory" {
-  bucket = aws_s3_bucket.memory.id
+  bucket = local.memory_bucket_name
 
   block_public_acls       = true
   block_public_policy     = true
@@ -32,7 +68,7 @@ resource "aws_s3_bucket_public_access_block" "memory" {
 }
 
 resource "aws_s3_bucket_ownership_controls" "memory" {
-  bucket = aws_s3_bucket.memory.id
+  bucket = local.memory_bucket_name
 
   rule {
     object_ownership = "BucketOwnerEnforced"
@@ -41,12 +77,13 @@ resource "aws_s3_bucket_ownership_controls" "memory" {
 
 # S3 bucket for frontend static website
 resource "aws_s3_bucket" "frontend" {
-  bucket = "${local.name_prefix}-frontend-${data.aws_caller_identity.current.account_id}"
+  count  = local.frontend_bucket_exists ? 0 : 1
+  bucket = local.frontend_bucket_name
   tags   = local.common_tags
 }
 
 resource "aws_s3_bucket_public_access_block" "frontend" {
-  bucket = aws_s3_bucket.frontend.id
+  bucket = local.frontend_bucket_name
 
   block_public_acls       = false
   block_public_policy     = false
@@ -55,7 +92,7 @@ resource "aws_s3_bucket_public_access_block" "frontend" {
 }
 
 resource "aws_s3_bucket_website_configuration" "frontend" {
-  bucket = aws_s3_bucket.frontend.id
+  bucket = local.frontend_bucket_name
 
   index_document {
     suffix = "index.html"
@@ -67,7 +104,7 @@ resource "aws_s3_bucket_website_configuration" "frontend" {
 }
 
 resource "aws_s3_bucket_policy" "frontend" {
-  bucket = aws_s3_bucket.frontend.id
+  bucket = local.frontend_bucket_name
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -77,7 +114,7 @@ resource "aws_s3_bucket_policy" "frontend" {
         Effect    = "Allow"
         Principal = "*"
         Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.frontend.arn}/*"
+        Resource  = "${local.frontend_bucket_arn}/*"
       },
     ]
   })
@@ -134,7 +171,7 @@ resource "aws_lambda_function" "api" {
   environment {
     variables = {
       CORS_ORIGINS     = var.use_custom_domain ? "https://${var.root_domain},https://www.${var.root_domain}" : "https://${aws_cloudfront_distribution.main.domain_name}"
-      S3_BUCKET        = aws_s3_bucket.memory.id
+      S3_BUCKET        = local.memory_bucket_name
       USE_S3           = "true"
       BEDROCK_MODEL_ID = var.bedrock_model_id
     }
@@ -208,7 +245,7 @@ resource "aws_lambda_permission" "api_gw" {
 # CloudFront distribution
 resource "aws_cloudfront_distribution" "main" {
   aliases = local.aliases
-  
+
   viewer_certificate {
     acm_certificate_arn            = var.use_custom_domain ? aws_acm_certificate.site[0].arn : null
     cloudfront_default_certificate = var.use_custom_domain ? false : true
@@ -217,8 +254,8 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   origin {
-    domain_name = aws_s3_bucket_website_configuration.frontend.website_endpoint
-    origin_id   = "S3-${aws_s3_bucket.frontend.id}"
+    domain_name = local.frontend_website_endpoint
+    origin_id   = "S3-${local.frontend_bucket_name}"
 
     custom_origin_config {
       http_port              = 80
@@ -236,7 +273,7 @@ resource "aws_cloudfront_distribution" "main" {
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "S3-${aws_s3_bucket.frontend.id}"
+    target_origin_id = "S3-${local.frontend_bucket_name}"
 
     forwarded_values {
       query_string = false
