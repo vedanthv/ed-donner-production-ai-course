@@ -12,7 +12,7 @@ on:
           - test
           - prod
       confirm:
-        description: 'Type the environment name to confirm destruction'
+        description: 'Type the environment name to confirm destruction.'
         required: true
 
 permissions:
