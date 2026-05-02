@@ -58,8 +58,8 @@ jobs:
           export DEFAULT_AWS_REGION=${{ secrets.DEFAULT_AWS_REGION }}
           
           # Make script executable and run it
-          chmod +x scripts/destroy.sh
-          ./scripts/destroy.sh ${{ github.event.inputs.environment }}
+          chmod +x production/week2/twin_aws/scripts/destroy.sh
+          ./production/week2/twin_aws/scripts/destroy.sh ${{ github.event.inputs.environment }}
         env:
           AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
 
