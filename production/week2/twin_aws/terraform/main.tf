@@ -122,7 +122,7 @@ resource "aws_iam_role_policy_attachment" "lambda_s3" {
 # Lambda function
 resource "aws_lambda_function" "api" {
   filename         = "${path.module}/../backend/lambda-deployment.zip"
-  function_name    = "${local.name_prefix}-api"
+  function_name    = "${local.name_prefix}-api-123"
   role             = aws_iam_role.lambda_role.arn
   handler          = "lambda_handler.handler"
   source_code_hash = filebase64sha256("${path.module}/../backend/lambda-deployment.zip")
