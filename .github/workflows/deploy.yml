@@ -66,13 +66,13 @@ jobs:
           
           # Make script executable and run it
           chmod +x production/week2/twin_aws/scripts/deploy.sh
-          production/week2/twin_aws/scripts/deploy.sh ${{ github.event.inputs.environment || 'dev' }}
+          ./production/week2/twin_aws/scripts/deploy.sh ${{ github.event.inputs.environment || 'dev' }}
         env:
           AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
           
       - name: Get Deployment URLs
         id: deploy_outputs
-        working-directory: production/week2/twin_aws/terraform
+        working-directory: ./terraform
         run: |
           terraform workspace select ${{ github.event.inputs.environment || 'dev' }}
           echo "cloudfront_url=$(terraform output -raw cloudfront_url)" >> $GITHUB_OUTPUT

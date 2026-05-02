@@ -9,7 +9,7 @@ echo "🚀 Deploying ${PROJECT_NAME} to ${ENVIRONMENT}..."
 # 1. Build Lambda package
 echo "📦 Building Lambda package..."
 echo "pwd: $(pwd)"
-cd backend   # go one level up from current directory
+cd production/week2/twin_aws/backend   # go one level up from current directory
 (uv run deploy.py)
 
 # 2. Terraform workspace & apply
