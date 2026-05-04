@@ -1,2 +1,14 @@
 /workspaces/ed-donner-production-ai-course/production/week1/saas/node_modules
 .env.local
+production/week2/twin_aws/terraform/terraform.tfstate
+production/week2/twin_aws/terraform/terraform.tfstate.backup
+cyber/frontend/package.json
+production/week2/twin_aws/terraform/terraform.tfstate
+cyber/frontend/postcss.config.mjs
+production/week2/twin_aws/terraform/terraform.tfstate
+cyber/frontend/src/app/favicon.ico
+cyber/frontend/tsconfig.json
+cyber/frontend/next.config.ts
+cyber/frontend/eslint.config.mjs
+cyber/backend/uv.lock
+production/week2/twin_aws/terraform/terraform.tfstate
