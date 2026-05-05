@@ -33,5 +33,5 @@ variable "semgrep_app_token" {
 variable "docker_image_tag" {
   description = "Tag for the Docker image"
   type        = string
-  default     = "latest"
+  default     = ""
 }
