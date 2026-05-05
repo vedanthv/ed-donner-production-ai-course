@@ -6,7 +6,7 @@ import CodeInput from '@/components/CodeInput';
 import AnalysisResults from '@/components/AnalysisResults';
 
 // Force relative URLs in production builds
-const API_BASE_URL = 'https://cyber-analyzer.victorioussand-d6d52ea5.eastus.azurecontainerapps.io';
+const API_BASE_URL = 'https://cyber-analyzer-lpgjcwsd3a-uc.a.run.app';
 console.log('API Base URL:', API_BASE_URL);
 
 /**
@@ -71,7 +71,7 @@ export default function Home() {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Cybersecurity Analyst.....</h1>
+          <h1 className="text-3xl font-bold text-foreground">Cybersecurity Analyst...</h1>
           <p className="text-accent mt-2">Python code analysis tool for security assessment</p>
         </header>
 
