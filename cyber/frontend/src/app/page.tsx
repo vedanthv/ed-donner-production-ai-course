@@ -6,7 +6,8 @@ import CodeInput from '@/components/CodeInput';
 import AnalysisResults from '@/components/AnalysisResults';
 
 // Force relative URLs in production builds
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = 'https://cyber-analyzer.victorioussand-d6d52ea5.eastus.azurecontainerapps.io';
+console.log('API Base URL:', API_BASE_URL);
 
 /**
  * Main application page for cybersecurity code analysis
@@ -44,24 +45,21 @@ export default function Home() {
     setIsAnalyzing(true);
     setError(null);
 
-    try {
-      const url = new URL('/api/analyze', API_BASE_URL).toString();
-      const response = await fetch(url, {
+     try {
+      const response = await fetch(`${API_BASE_URL}/api/analyze`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify({ code: codeContent }),
       });
-      console.log(response)
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const results: AnalysisResponse = await response.json();
       setAnalysisResults(results);
-      console.log('Analysis results:', results);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during analysis');
     } finally {
@@ -73,7 +71,7 @@ export default function Home() {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Cybersecurity Analyst</h1>
+          <h1 className="text-3xl font-bold text-foreground">Cybersecurity Analyst.....</h1>
           <p className="text-accent mt-2">Python code analysis tool for security assessment</p>
         </header>
 
