@@ -16,15 +16,13 @@ load_dotenv(override=True)
 app = FastAPI(title="Cybersecurity Analyzer API")
 
 cors_origins = [
-    "https://psychic-palm-tree-64v4vxw54v735g55-3000.app.github.dev"
+    "*"
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://psychic-palm-tree-64v4vxw54v735g55-3000.app.github.dev"
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

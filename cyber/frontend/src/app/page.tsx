@@ -6,11 +6,7 @@ import CodeInput from '@/components/CodeInput';
 import AnalysisResults from '@/components/AnalysisResults';
 
 // Force relative URLs in production builds
-// Only use localhost when explicitly running in development mode
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 
-  (process.env.NODE_ENV === 'development' && typeof window !== 'undefined' && window.location?.hostname === 'localhost' 
-    ? 'https://psychic-palm-tree-64v4vxw54v735g55-8000.app.github.dev' 
-    : '');
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * Main application page for cybersecurity code analysis
